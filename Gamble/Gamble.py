@@ -1,40 +1,52 @@
-def add(x, y):
-    return x + y
+import tkinter as tk
 
-def subtract(x, y):
-    return x - y
+def btn_click(item):
+    global expression
+    expression = expression + str(item)
+    input_text.set(expression)
 
-def multiply(x, y):
-    return x * y
+def btn_clear():
+    global expression
+    expression = ""
+    input_text.set("")
 
-def divide(x, y):
-    if y == 0:
-        return "Error! Division by zero."
-    else:
-        return x / y
+def btn_equal():
+    global expression
+    result = str(eval(expression))
+    input_text.set(result)
+    expression = ""
 
-def calculator():
-    print("Welcome to Calculator App!")
-    print("Select operation:")
-    print("1. Add")
-    print("2. Subtract")
-    print("3. Multiply")
-    print("4. Divide")
+expression = ""
 
-    choice = input("Enter choice (1/2/3/4): ")
+# Creating a basic window
+window = tk.Tk()
+window.title("Calculator")
+window.configure(bg='grey')  # Set background color to grey
 
-    num1 = float(input("Enter first number: "))
-    num2 = float(input("Enter second number: "))
+# StringVar() is used to get the instance of input field
+input_text = tk.StringVar()
 
-    if choice == '1':
-        print("Result:", add(num1, num2))
-    elif choice == '2':
-        print("Result:", subtract(num1, num2))
-    elif choice == '3':
-        print("Result:", multiply(num1, num2))
-    elif choice == '4':
-        print("Result:", divide(num1, num2))
-    else:
-        print("Invalid input")
+# Creating the entry field
+entry_field = tk.Entry(window, textvariable=input_text, font=('Arial', 18, 'bold'), bd=20, insertwidth=4, width=14, bg="green", fg="white", justify='right')  # Set text color to white and background color to green
+entry_field.grid(columnspan=4)
 
-calculator()
+# Buttons
+buttons = [
+    ('7', '8', '9', '/'),
+    ('4', '5', '6', '*'),
+    ('1', '2', '3', '-'),
+    ('C', '0', '=', '+')
+]
+
+# Adding buttons to the window
+row = 1
+for button_row in buttons:
+    col = 0
+    for button_text in button_row:
+        tk.Button(window, text=button_text, padx=20, pady=20, font=('Arial', 18, 'bold'), fg="white", bg="grey",  # Set text color to white and background color to grey
+                  command=lambda button_text=button_text: btn_click(button_text) if button_text != '=' else btn_equal() if button_text == '=' else btn_clear()).grid(row=row, column=col)
+        col += 1
+    row += 1
+
+# Running the application
+window.mainloop()
